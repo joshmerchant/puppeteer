@@ -46,7 +46,7 @@ const downloadURLs = {
   },
   firefox: {
     linux: '%s/firefox-%s.en-US.%s-x86_64.tar.bz2',
-    mac: '%s/firefox-%s.en-US.%s.dmg',
+    mac: '%s/firefox-%s.en-US.%s.dmg,
     win32: '%s/firefox-%s.en-US.%s.zip',
     win64: '%s/firefox-%s.en-US.%s.zip',
   },
@@ -113,11 +113,15 @@ function handleArm64(): void {
     if (stats === undefined) {
       fs.stat('/usr/bin/chromium', function (err, stats) {
         if (stats === undefined) {
-          console.error(`The chromium binary is not available for arm64.`);
-          console.error(`If you are on Ubuntu, you can install with: `);
-          console.error(`\n sudo apt install chromium\n`);
-          console.error(`\n sudo apt install chromium-browser\n`);
-          throw new Error();
+          fs.stat('/usr/local/bin/chromium', function(err, stats){
+            if (stats === undefined) {
+              console.error(`The chromium binary is not available for arm64.`);
+              console.error(`If you are on Ubuntu, you can install with: `);
+              console.error(`\n sudo apt install chromium\n`);
+              console.error(`\n sudo apt install chromium-browser\n`);
+              throw new Error();
+            }
+          });
         }
       });
     }
